@@ -35,6 +35,7 @@ func doEvery(d time.Duration, f func(time.Time)) {
 }
 
 func doReading(_ time.Time) {
+	log.Print("Sending UPS data")
 	influxURL, found := os.LookupEnv("INFLUXDB_URL")
 	if !found {
 		log.Fatal("INFLUXDB_URL was not found in the environment")
