@@ -4,7 +4,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 
 WORKDIR /go/src/app
-ADD src/main.go /go/src/app
+ADD src/* /go/src/app/
 RUN go get && go build -o /apc-influx
 
 FROM scratch
