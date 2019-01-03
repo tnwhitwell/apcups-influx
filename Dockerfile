@@ -1,11 +1,18 @@
-FROM golang:1.11.4-stretch as build
+FROM golang:alpine as builder
 
 ENV CGO_ENABLED=0
 ENV GOOS=linux
+ENV GOARCH=amd64
 
-WORKDIR /go/src/app
-ADD src/* /go/src/app/
-RUN go get && go build -o /apc-influx
+RUN apk update && apk add --no-cache git ca-certificates tzdata && update-ca-certificates
+
+RUN adduser -D -g '' appuser
+
+ADD src/* ${GOPATH}/src/app/
+WORKDIR ${GOPATH}/src/app
+
+RUN go get -d -v
+RUN go build -a -installsuffix cgo -ldflags="-w -s" -o /go/bin/apc-influx
 
 FROM scratch
 ARG VCS_REF
@@ -18,5 +25,12 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0" \
       maintainer="tom@whi.tw"
 
-COPY --from=build /apc-influx /apc-influx
-CMD [ "/apc-influx" ]
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /etc/passwd /etc/passwd
+
+COPY --from=builder /go/bin/apc-influx /go/bin/apc-influx
+
+USER appuser
+
+ENTRYPOINT [ "/go/bin/apc-influx" ]
