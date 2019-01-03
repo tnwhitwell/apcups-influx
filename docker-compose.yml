@@ -1,0 +1,15 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:latest
+    restart: always
+    volumes:
+      - ${CONFIG}/influxdb:/var/lib/influxdb
+  apcups-sender:
+    image: tnwhitwell/apcups-influx:latest
+    restart: always
+    environment:
+      APCUPSD_URL: upshost:3551
+      READING_INTERVAL: 60
+      INFLUXDB_DB: UPSData
+      INFLUXDB_URL: http://influxdb:8086
