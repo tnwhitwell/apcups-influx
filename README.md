@@ -2,6 +2,8 @@
 
 [![Version Badges relate to](https://images.microbadger.com/badges/version/tnwhitwell/apcups-influx.svg)](https://microbadger.com/images/tnwhitwell/apcups-influx "Get your own version badge on microbadger.com") [![Image Size Badge](https://images.microbadger.com/badges/image/tnwhitwell/apcups-influx.svg)](https://microbadger.com/images/tnwhitwell/apcups-influx "Get your own image badge on microbadger.com") [![Built Commit Badge](https://images.microbadger.com/badges/commit/tnwhitwell/apcups-influx.svg)](https://microbadger.com/images/tnwhitwell/apcups-influx "Get your own commit badge on microbadger.com")
 
+Available on dockerhub: [tnwhitwell/apcups-influx](https://hub.docker.com/r/tnwhitwell/apcups-influx)
+
 ## Description
 
 This container will get metrics from apcupsd (via TCP) and publish them to an influxdb server at a specified interval
