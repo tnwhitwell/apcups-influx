@@ -10,3 +10,4 @@ RUN go get && go build -o /apc-influx
 FROM scratch
 
 COPY --from=build /apc-influx /apc-influx
+CMD [ "/apc-influx" ]

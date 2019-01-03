@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/influxdata/influxdb/client/v2"
 )
@@ -25,19 +27,20 @@ func queryDB(clnt client.Client, db string, cmd string) (res []client.Result, er
 	return res, nil
 }
 
-func main() {
+func doEvery(d time.Duration, f func(time.Time)) {
+	f(time.Now())
+	for x := range time.Tick(d) {
+		f(x)
+	}
+}
+
+func doReading(_ time.Time) {
 	influxURL, found := os.LookupEnv("INFLUXDB_URL")
 	if !found {
 		log.Fatal("INFLUXDB_URL was not found in the environment")
 	}
 	influxUser, found := os.LookupEnv("INFLUXDB_USER")
-	if !found {
-		log.Fatal("INFLUXDB_USER was not found in the environment")
-	}
 	influxPass, found := os.LookupEnv("INFLUXDB_PASS")
-	if !found {
-		log.Fatal("INFLUXDB_PASS was not found in the environment")
-	}
 	influxDB, found := os.LookupEnv("INFLUXDB_DB")
 	if !found {
 		log.Fatal("INFLUXDB_DB was not found in the environment")
@@ -81,4 +84,17 @@ func main() {
 	if err := c.Close(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func main() {
+	interval, found := os.LookupEnv("READING_INTERVAL")
+	if !found {
+		log.Fatal("READING_INTERVAL was not found in the environment")
+	}
+	i, err := strconv.Atoi(interval)
+	if err != nil {
+		log.Fatal(err)
+	}
+	intervalSeconds := time.Duration(1000*i) * time.Millisecond
+	doEvery(intervalSeconds, doReading)
 }
