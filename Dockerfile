@@ -22,6 +22,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/tnwhitwell/apcups-influx" \
       org.label-schema.docker.cmd="docker run -e APCUPSD_URL=upshost:3551 -e INFLUXDB_DB=UPSData -e INFLUXDB_URL=http://influxdb:8086 -e READING_INTERVAL=60 tnwhitwell/apcups-influx" \
+      org.label-schema.docker.params="APCUPSD_URL=url of apcupsd instance,INFLUXDB_DB=name of infuxdb database to use,INFLUXDB_USER=username for influxdb,INFLUXDB_PASS=password for influxdb,INFLUXDB_URL=URL of the influxdb instance,READING_INTERVAL=integer number of seconds between readings are taken," \
       org.label-schema.schema-version="1.0" \
       maintainer="tom@whi.tw"
 
